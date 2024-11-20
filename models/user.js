@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+//連接數據庫
 main().catch(err => console.log(err));
 
 async function main() {
