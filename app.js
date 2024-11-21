@@ -21,6 +21,12 @@ app.get('/login', (req, res) => {
     });
   })
 
+  app.get('/list', (req, res) => {
+    res.render('list.html', {
+     
+    });
+  })
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
