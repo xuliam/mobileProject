@@ -19,6 +19,7 @@
     "express": "^4.21.1",
     "express-art-template": "^1.0.1",
     "jquery": "^3.7.1",
+    "mongodb": "^6.11.0",
     "mongoose": "^8.8.2"
   }
 }

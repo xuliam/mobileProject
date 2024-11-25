@@ -17,12 +17,12 @@ const productSchema = new Schema({
 		type: Number,
 		required: true
 	},
-    categroy: {
+    type: {
 		type: String,
 		required: true
 	},
     note: {
-		type: String,
+		type: String
 	}
 });
 

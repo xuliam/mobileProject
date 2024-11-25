@@ -2,6 +2,7 @@
 const express = require('express');
 const path = require('path');
 const router = require('./router');
+const bodyParser = require('body-parser')
 
 // getting-started.js
 // const mongoose = require('mongoose');
@@ -37,7 +38,10 @@ app.use('/node_modules/', express.static(path.join(__dirname, './node_modules/')
 
 app.engine('html', require('express-art-template'));
 
-
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }))
+// parse application/json
+app.use(bodyParser.json())
 
 app.use(router);
 

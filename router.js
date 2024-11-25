@@ -34,5 +34,22 @@ router.get('/list', async(req, res)=>{
 
 })
 
+//渲染加载页面
+router.get('/list/new', function(req, res){
+    res.render('new.html');
+})
+
+
+router.post('/list/new', async(req, res)=>{
+    console.log(req.body);
+    try{
+        await new Product(req.body).save();
+    }catch(e){
+        console.error('保存產品失敗:', e);
+    }finally{
+        res.redirect('/list');
+    }
+})
+
 
 module.exports = router;
