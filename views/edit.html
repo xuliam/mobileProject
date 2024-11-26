@@ -241,46 +241,47 @@
 <!-- 改的部分 -->
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">添加产品</h1>
+        <h1 class="h2">修改产品</h1>
       </div>
 
-      <form action="/list/new" method="post">
+      <form action="/list/edit" method="post">
+        <input type = "hidden" name = "id" value = "{{ product._id }}">
         <div class="row mb-3">
           <label for="inputPassword3" class="col-sm-2 col-form-label">编码</label>
           <div class="col-sm-10">
-            <input type="number" class="form-control" name="code" id="">
+            <input type="number" class="form-control" name="code" id="" value="{{product.code}}">
           </div>
         </div>
        
         <div class="row mb-3">
             <label for="inputPassword3" class="col-sm-2 col-form-label">产品名称</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" name="name" id="">
+              <input type="text" class="form-control" name="name" value="{{ product.name}}">
             </div>
         </div>
 
         <div class="row mb-3">
             <label for="inputPassword3" class="col-sm-2 col-form-label">价钱</label>
             <div class="col-sm-10">
-              <input type="number" class="form-control" name="price" id="">
+              <input type="number" class="form-control" name="price" value="{{ product.price }}">
             </div>
         </div>
 
         <div class="row mb-3">
-          <label for="inputPassword3" class="col-sm-2 col-form-label">數量</label>
+          <label for="inputPassword3" class="col-sm-2 col-form-label">庫存數量</label>
           <div class="col-sm-10">
-            <input type="text" class="form-control" name="quantity" id="">
+            <input type="text" class="form-control" name="type" value="{{ product.quantity }}">
           </div>
         </div>
 
       <div class="row mb-3">
         <label for="inputPassword3" class="col-sm-2 col-form-label">备注</label>
         <div class="col-sm-10">
-          <input type="text" class="form-control" name="note" id="">
+          <input type="text" class="form-control" name="note" value="{{ product.note }}">
         </div>
       </div>
        
-        <button type="submit" value="Submit" class="btn btn-primary">添加</button>
+        <button type="submit" value="Submit" class="btn btn-primary">更改</button>
       </form>
       
     </main>

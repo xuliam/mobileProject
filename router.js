@@ -6,7 +6,7 @@ const router = express.Router()
 
 router.get('/', (req, res) => {
     res.render('index.html', {
-      name : "zhangs"
+      name : "不重要 不重要"
     });
 })
   
@@ -49,6 +49,31 @@ router.post('/list/new', async(req, res)=>{
     }finally{
         res.redirect('/list');
     }
+})
+//渲染编辑
+router.get('/list/edit', async(req, res)=>{
+    data = await Product.findById(req.query.id.replace(/"/g, ''));
+    res.render('edit.html',{
+        product: data
+    })
+})
+
+//编辑
+router.post('/list/edit', async(req, res)=>{
+    try{
+        let productId = req.body.id.replace(/"/g, '')
+        await Product.findByIdAndUpdate(productId, req.body)
+    }catch(e){
+        console.error('错误¥%……&*', e);
+    }finally{
+        res.redirect('/list')
+    }
+    
+})
+
+router.get('/list/delete', async(req, res)=>{
+    await Product.findByIdAndDelete(req.query.id.replace(/"/g, ''))
+    res.redirect('/list')
 })
 
 

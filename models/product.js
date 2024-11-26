@@ -17,8 +17,8 @@ const productSchema = new Schema({
 		type: Number,
 		required: true
 	},
-    type: {
-		type: String,
+    quantity: {
+		type: Number,
 		required: true
 	},
     note: {
