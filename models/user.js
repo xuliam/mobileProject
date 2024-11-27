@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 main().catch(err => console.log(err));
 
 async function main() {
-  await mongoose.connect('mongodb://127.0.0.1:27017/test');
+  await mongoose.connect('mongodb://localhost:27017/user');
 
   // use `await mongoose.connect('mongodb://user:password@127.0.0.1:27017/test');` if your database has auth enabled
 }
@@ -12,20 +12,16 @@ async function main() {
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
-  id: {
-    type: number,
-    required: true
-  },
-  user: {
-    type: String,
-    required: true
-  },
   email: {
     type: String,
     required: true
   },
+  nickname: {
+    type: String,
+    required: true
+  },
   password: {
-    type: string,
+    type: Number,
     required: true
   }
  

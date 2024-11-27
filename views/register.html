@@ -7,20 +7,20 @@
 </head>
 <body>
 
-        <form id="register_form">
+        <form action="/register" method="post">       
           <!-- <img class="mb-4" src="/docs/5.3/assets/brand/bootstrap-logo.svg" alt="" width="72" height="57"> -->
           <h1 class="h3 mb-3 fw-normal">Please register</h1>
       
           <div class="form-group">
-            <input type="email" class="form-control" id="email" placeholder="name@example.com">
+            <input type="text" class="form-control" name="email" placeholder="name@example.com">
             <label for="floatingInput">Email address</label>
           </div>
           <div class="form-group">
-            <input type="nickname" class="form-control" id="nickname" placeholder="nickname">
+            <input type="text" class="form-control" name="nickname" placeholder="nickname">
             <label for="floatingInput">nick name</label>
           </div>
           <div class="form-group">
-            <input type="password" class="form-control" id="password" placeholder="Password">
+            <input type="password" class="form-control" name="password" placeholder="Password">
             <label for="floatingPassword">Password</label>
           </div>
       

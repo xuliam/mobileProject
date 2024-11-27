@@ -1,5 +1,6 @@
 const express = require('express');
 const Product = require('./models/product');
+// const User = require('./models/user');
 
 const router = express.Router()
 
@@ -11,19 +12,25 @@ router.get('/', (req, res) => {
 })
   
 router.get('/login', (req, res) => {
-      res.render('login.html', {
-       
-      });
+      res.render('login.html');
 })
-
+//渲染register页面
 router.get('/register', (req, res) => {
     res.render('register.html', {
      
     });
 })
 
-router.post('/users', async(req, res)=>{
 
+router.post('/register', async(req, res)=>{
+    try{
+        console.log(req.body)
+    await new User(req.body).save();
+    }catch(e){
+        console.log('错啦……&*', e)
+    }finally{
+        res.redirect('/')
+    }
 })
 
 router.get('/list', async(req, res)=>{
