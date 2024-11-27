@@ -42,15 +42,15 @@
 //表單收不到數據
 
             console.log(formData);
-            // $.ajax({
-            //     url: '/register',
-            //     type: 'post',
-            //     data: formData,
-            //     dataType: 'json',
-            //     success: function(data){
-            //         console.log(data);
-            //     }
-            // })
+            $.ajax({
+                url: '/register',
+                type: 'post',
+                data: formData,
+                dataType: 'json',
+                success: function(data){
+                    console.log(data);
+                }
+            })
         })
     </script>
 
