@@ -10,7 +10,7 @@ const url = 'https://www.1823.gov.hk/common/ical/tc.json';
 
 router.get('/', (req, res) => {
     res.render('index.html', {
-      name : "靓嘅版面"
+       user: req.session.newUser
     });
 })
   
@@ -46,6 +46,8 @@ router.post('/register', async (req, res) => {
         const newUser = new User(req.body); // 修正这里要保存用户而不是产品
         await newUser.save(); // 使用 await 保存用户
 
+        req.session.newUser = newUser;
+
         return res.status(200).json({
             err_code: 0,
             message: '注册成功'
@@ -61,8 +63,10 @@ router.post('/register', async (req, res) => {
 
 
 router.get('/list', async(req, res)=>{
+    
     data = await Product.find({})
     res.render('list.html', {
+        user: req.session.newUser,
         products:data
     });
 })

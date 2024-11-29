@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="en" data-bs-theme="auto">
   <head><script src="/docs/5.3/assets/js/color-modes.js"></script>
@@ -356,29 +355,9 @@
 
       <h2>list 表</h2>
       <div class="table-responsive small">
-        <!-- <table class="table table-striped table-sm">
-          <thead>
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Header</th>
-              <th scope="col">Header</th>
-              <th scope="col">Header</th>
-              <th scope="col">Header</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>1,001</td>
-              <td>random</td>
-              <td>data</td>
-              <td>placeholder</td>
-              <td>text</td>
-            </tr>
-           
-          </tbody>
-        </table> -->
-
+        {{ if user }}
         <a class="btn btn-success" href="/list/new">添加</a>
+        {{ /if }}
         <div class="table-responsive small">
           <table class="table table-striped table-sm">
             <thead>
@@ -388,8 +367,7 @@
                 <th scope="col">產品名稱</th>
                 <th scope="col">价钱</th>
                 <th scope="col">數量</th>
-                <th scope="col">备注</th>
-  
+                <th scope="col">备注</th>  
               </tr>
             </thead>
             <tbody>
@@ -401,12 +379,15 @@
                 <td>{{ $value.price }}</td>
                 <td>{{ $value.quantity }}</td>
                 <td>{{ $value.note }}</td>
+                {{ if user }}
                 <td>
                   <a href="/list/edit?id={{ $value._id }}">編輯</a>
                   <a href="/list/delete?id={{ $value._id }}">刪除</a>  
                 </td>  
+                {{/if}}
               </tr>
               {{ /each }}
+
             </tbody>
           </table>
 
