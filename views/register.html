@@ -1,58 +1,84 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8">
-<link rel="stylesheet" src="/node_modules/bootstrap/dist/js/bootstrap.css"
-
+    <meta charset="utf-8">
+    <title>Registration Form</title>
+    <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .form-container {
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .btn {
+            width: 100%;
+        }
+    </style>
 </head>
 <body>
 
-        <form action="/register" method="post">       
-          <!-- <img class="mb-4" src="/docs/5.3/assets/brand/bootstrap-logo.svg" alt="" width="72" height="57"> -->
-          <h1 class="h3 mb-3 fw-normal">Please register</h1>
-      
-          <div class="form-group">
-            <input type="text" class="form-control" name="email" placeholder="name@example.com">
-            <label for="floatingInput">Email address</label>
-          </div>
-          <div class="form-group">
-            <input type="text" class="form-control" name="nickname" placeholder="nickname">
-            <label for="floatingInput">nick name</label>
-          </div>
-          <div class="form-group">
-            <input type="password" class="form-control" name="password" placeholder="Password">
-            <label for="floatingPassword">Password</label>
-          </div>
-      
-          
-          <button class="btn btn-success btn-block" type="submit">register</button>
-          <p class="mt-5 mb-3 text-body-secondary">&copy; 2017–2024</p>
+    <div class="form-container">
+        <form id="registerForm">       
+            <h1 class="h3 mb-3 fw-normal">Please Register</h1>
+            <div class="form-group">
+                <label for="email">Email address</label>
+                <input type="email" class="form-control" name="email" placeholder="name@example.com" required>
+            </div>
+            <div class="form-group">
+                <label for="nickname">Nickname</label>
+                <input type="text" class="form-control" name="nickname" placeholder="nickname" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" name="password" placeholder="Password" required>
+            </div>
+            <button class="btn btn-success" type="submit">Register</button>
+            <p class="mt-5 mb-3 text-center text-muted">&copy; 2017–2024</p>
         </form>
-      
-    
-    <script language="JavaScript" type="text/javascript" src="/node_modules/jquery/dist/jquery.js"></script>
-    <script src="/node_modules/bootstrap/dist/js/bootstrap.js"></script>
-   
+    </div>
+
+    <script src="/node_modules/jquery/dist/jquery.js"></script>
+    <!-- <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script> -->
 
     <script>
-        $('#register_form').on('submit', function(e){
-            e.preventDefault()
-            // console.log(1234134)
-            var formData = $(this).serialize()
-//表單收不到數據
 
-            console.log(formData);
-            $.ajax({
-                url: '/register',
-                type: 'post',
-                data: formData,
-                dataType: 'json',
-                success: function(data){
-                    console.log(data);
-                }
-            })
-        })
-    </script>
 
+$(document).ready(function() {
+    $("#registerForm").on("submit", function(e) {
+        e.preventDefault(); // 阻止表单的默认提交行为
+        let formData = $("#registerForm").serialize()
+      $.ajax({
+        url: '/register',
+        type: 'post',
+        data: formData,
+        dataType: 'json',
+        success: function (data) {
+          var err_code = data.err_code
+          if (err_code === 0) {
+            // window.alert('注册成功！')
+            // 服务端重定向针对异步请求无效
+            window.location.href = '/'
+          } else if (err_code === 1) {
+            window.alert('邮箱或暱稱已存在！')
+          } else if (err_code === 500) {
+            window.alert('服务器忙，请稍后重试！')
+          }
+        }
+      })
+    });
+});
+
+
+  </script>
 </body>
 </html>

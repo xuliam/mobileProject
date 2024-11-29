@@ -1,13 +1,16 @@
 const express = require('express');
+const axios = require('axios');
 const Product = require('./models/product');
-// const User = require('./models/user');
+const User = require('./models/user');
 
 const router = express.Router()
+
+const url = 'https://www.1823.gov.hk/common/ical/tc.json';
 
 
 router.get('/', (req, res) => {
     res.render('index.html', {
-      name : "不重要 不重要"
+      name : "靓嘅版面"
     });
 })
   
@@ -22,23 +25,46 @@ router.get('/register', (req, res) => {
 })
 
 
-router.post('/register', async(req, res)=>{
-    try{
-        console.log(req.body)
-    await new User(req.body).save();
-    }catch(e){
-        console.log('错啦……&*', e)
-    }finally{
-        res.redirect('/')
+router.post('/register', async (req, res) => {
+    const { email, nickname } = req.body; // 使用解构赋值提取 email 和 nickname
+
+    try {
+        const existingUser = await User.findOne({
+            $or: [
+                { email },
+                { nickname }
+            ]
+        });
+
+        if (existingUser) {
+            return res.status(200).json({
+                err_code: 1, // 返回成功为 false，因为邮箱或暱稱已存在
+                message: "邮箱或暱稱已存在"
+            });
+        }
+
+        const newUser = new User(req.body); // 修正这里要保存用户而不是产品
+        await newUser.save(); // 使用 await 保存用户
+
+        return res.status(200).json({
+            err_code: 0,
+            message: '注册成功'
+        });
+    } catch (error) {
+        console.error(error); // 日志记录错误
+        return res.status(500).json({
+            err_code: 500,
+            message: '服务器错误'
+        });
     }
-})
+});
+
 
 router.get('/list', async(req, res)=>{
     data = await Product.find({})
     res.render('list.html', {
         products:data
     });
-
 })
 
 //渲染加载页面
@@ -48,7 +74,6 @@ router.get('/list/new', function(req, res){
 
 
 router.post('/list/new', async(req, res)=>{
-    console.log(req.body);
     try{
         await new Product(req.body).save();
     }catch(e){
@@ -81,6 +106,48 @@ router.post('/list/edit', async(req, res)=>{
 router.get('/list/delete', async(req, res)=>{
     await Product.findByIdAndDelete(req.query.id.replace(/"/g, ''))
     res.redirect('/list')
+})
+// holiday api______________________________________________________
+async function getHoliday(url) {
+    try {
+      const response = await axios.get(url);
+
+      const data = response.data;
+    //   let result = data.vcalendar[0].vevent;
+        const vcalendar = data.vcalendar;
+        // for (let i = 0; i < vcalendar.length; i++) {
+        //     const vevent = vcalendar[i].vevent;
+        //     for (let j = 0; j < vevent.length; j++) {
+               
+        //         console.log(vevent[j].summary)
+                
+        //     }
+            
+        // }
+
+        data.vcalendar.forEach(calendarItem => {
+            calendarItem.vevent.forEach(veventItem => {
+                console.log(veventItem.summary, veventItem.dtstart);
+            })
+        })
+
+    } catch (error) {
+        console.error(error);
+      }
+    }
+
+    function getToday(){
+        var datetime = new Date();
+        // console.log(datetime.toISOString().slice(0,10));
+        console.log(datetime);
+        return datetime;
+    }
+
+
+router.get('/info', async(req, res)=>{
+    getToday();
+    getHoliday(url);
+    res.send('hello holiday')
 })
 
 
