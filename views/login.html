@@ -165,31 +165,55 @@
 
     
 <main class="form-signin w-100 m-auto">
-  <form>
+  <form id = login_form>
     <img class="mb-4" src="/docs/5.3/assets/brand/bootstrap-logo.svg" alt="" width="72" height="57">
     <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
 
     <div class="form-floating">
-      <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+      <input type="email" class="form-control" name="email" placeholder="name@example.com">
       <label for="floatingInput">Email address</label>
     </div>
     <div class="form-floating">
-      <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+      <input type="password" class="form-control" name="password" placeholder="Password">
       <label for="floatingPassword">Password</label>
     </div>
 
-    <div class="form-check text-start my-3">
-      <input class="form-check-input" type="checkbox" value="remember-me" id="flexCheckDefault">
-      <label class="form-check-label" for="flexCheckDefault">
-        Remember me
-      </label>
+
     </div>
     <a href="/register">点击注册</a>
     <button class="btn btn-primary w-100 py-2" type="submit">Sign in</button>
     <p class="mt-5 mb-3 text-body-secondary">&copy; 2017–2024</p>
   </form>
+  <script src="/node_modules/jquery/dist/jquery.js"></script>
+
+  <script>
+
+
+  $("#login_form").on("submit", function(e) {
+      e.preventDefault(); // 阻止表单的默认提交行为
+      let formData = $("#login_form").serialize()
+      console.log(formData)
+     $.ajax({
+      url: '/login',
+      type: 'post',
+      data: formData,
+      dataType: 'json',
+      success: function (data) {
+        var err_code = data.err_code
+        if (err_code === 0) {
+          // 服务端重定向针对异步请求无效
+          window.location.href = '/'
+        } else if (err_code === 1) {
+          window.alert('邮箱或密碼錯誤！')
+        } else if (err_code === 500) {
+          window.alert('服务器忙，请稍后重试！')
+        }
+      }
+    })
+   });
+
+  </script>
 </main>
-<script src="/docs/5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
     </body>
 </html>

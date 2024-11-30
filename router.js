@@ -10,17 +10,53 @@ const url = 'https://www.1823.gov.hk/common/ical/tc.json';
 
 router.get('/', (req, res) => {
     res.render('index.html', {
-       user: req.session.newUser
+       user: req.session.user
     });
 })
-  
+
+router.get('/logout', (req, res) =>{
+    req.session.user = null;
+    res.redirect('/');
+})
+
+// ___________________________________________
+ //login 渲染 
 router.get('/login', (req, res) => {
       res.render('login.html');
 })
+
+router.post('/login', async(req, res) =>{
+    let body = req.body
+    try{
+        const existingUser = await User.findOne({
+            email: body.email,
+            password: body.password
+        });
+        if (!existingUser){
+            return res.status(200).json({
+                err_code: 1,
+                message:'Email or Password is invali&*()_'
+            })
+        }
+        req.session.user = existingUser
+
+        return res.status(201).json({
+            err_code: 0,
+            message:'ok ^_^'
+        })
+        
+    }catch(error){
+        return res.status(500).json({
+            err_code: 500,
+            message:error.message
+        })
+    }
+})
+
+
 //渲染register页面
 router.get('/register', (req, res) => {
-    res.render('register.html', {
-     
+    res.render('register.html', {     
     });
 })
 
@@ -46,9 +82,9 @@ router.post('/register', async (req, res) => {
         const newUser = new User(req.body); // 修正这里要保存用户而不是产品
         await newUser.save(); // 使用 await 保存用户
 
-        req.session.newUser = newUser;
+        req.session.user = newUser;
 
-        return res.status(200).json({
+        return res.status(201).json({
             err_code: 0,
             message: '注册成功'
         });
@@ -61,12 +97,13 @@ router.post('/register', async (req, res) => {
     }
 });
 
+//_____________________________________________________
 
 router.get('/list', async(req, res)=>{
     
     data = await Product.find({})
     res.render('list.html', {
-        user: req.session.newUser,
+        user: req.session.user,
         products:data
     });
 })
