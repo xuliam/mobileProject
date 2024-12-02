@@ -99,7 +99,7 @@ router.post('/register', async (req, res) => {
 
 //_____________________________________________________
 
-router.get('/list', async(req, res)=>{
+router.get('/list', async(req, res) => {
     
     data = await Product.find({})
     res.render('list.html', {
@@ -151,45 +151,39 @@ router.get('/list/delete', async(req, res)=>{
 // holiday api______________________________________________________
 async function getHoliday(url) {
     try {
-      const response = await axios.get(url);
-
+      const response = await axios.get(url);  
       const data = response.data;
-    //   let result = data.vcalendar[0].vevent;
-        const vcalendar = data.vcalendar;
-        // for (let i = 0; i < vcalendar.length; i++) {
-        //     const vevent = vcalendar[i].vevent;
-        //     for (let j = 0; j < vevent.length; j++) {
-               
-        //         console.log(vevent[j].summary)
-                
-        //     }
-            
-        // }
+      let events = [];
 
         data.vcalendar.forEach(calendarItem => {
             calendarItem.vevent.forEach(veventItem => {
-                console.log(veventItem.summary, veventItem.dtstart);
+                events.push({
+                    summary: veventItem.summary,
+                    dtstart: veventItem.dtstart[0]
+                });
             })
         })
-
+        console.log(events);
+        return events;
     } catch (error) {
         console.error(error);
+        return [];
       }
-    }
-
-    function getToday(){
-        var datetime = new Date();
-        // console.log(datetime.toISOString().slice(0,10));
-        console.log(datetime);
-        return datetime;
     }
 
 
 router.get('/info', async(req, res)=>{
-    getToday();
-    getHoliday(url);
-    res.send('hello holiday')
-})
+    
+    
+        // function getToday(){
+        //     var datetime = new Date();
+        //     // console.log(datetime.toISOString().slice(0,10));
+        //     console.log(datetime);
+        //     return datetime;
+        // }
+        const events = await getHoliday(url)
+    res.render('info.html', {events: events} );
+});
 
 
 module.exports = router;
