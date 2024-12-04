@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>手机店商品展示</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f3f4f6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .product-row {
+            display: flex; /* 使用弹性布局 */
+            justify-content: space-between; /* 在行中分隔产品 */
+            margin-bottom: 20px; /* 行之间的间距 */
+        }
+
+        .product {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            flex: 0 48%; /* 确保产品占据48%的宽度，留出间隔 */
+        }
+
+        .product img {
+            max-width: 100%; /* 使图像适应产品容器 */
+            border-radius: 8px;
+            margin-bottom: 10px; /* 图像与文本之间的间距 */
+        }
+
+        .product-info {
+            flex: 1;
+        }
+
+        .product-name {
+            font-size: 28px; /* 增大字号 */
+            color: #4CAF50;
+            margin: 0;
+        }
+
+        .product-quantity,
+        .product-status {
+            font-size: 18px; /* 增大字号 */
+            margin: 5px 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>我们的商品</h1>
+
+        <div class="product-row">
+            <div class="product">
+                <img src="public/img/phone1.jpg" alt="手机1">
+                <div class="product-info">
+                    <h2 class="product-name">iPhone 14 Pro</h2>
+                    <p class="product-quantity">数量: 10</p>
+                    <p class="product-status">状态: 有货</p>
+                </div>
+            </div>
+
+            <div class="product">
+                <img src="public/img/phone2.jpg" alt="手机2">
+                <div class="product-info">
+                    <h2 class="product-name">Samsung Galaxy S22</h2>
+                    <p class="product-quantity">数量: 5</p>
+                    <p class="product-status">状态: 暂无库存</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="product-row">
+            <div class="product">
+                <img src="public/img/phone3.jpg" alt="手机3">
+                <div class="product-info">
+                    <h2 class="product-name">Huawei P50 Pro</h2>
+                    <p class="product-quantity">数量: 8</p>
+                    <p class="product-status">状态: 有货</p>
+                </div>
+            </div>
+
+            <div class="product">
+                <img src="public/img/phone4.jpg" alt="手机4">
+                <div class="product-info">
+                    <h2 class="product-name">Xiaomi 12</h2>
+                    <p class="product-quantity">数量: 15</p>
+                    <p class="product-status">状态: 有货</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+
+</html>

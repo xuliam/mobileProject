@@ -29,8 +29,3 @@ const productSchema = new Schema({
 //发布数据模型
 module.exports = mongoose.model('Product', productSchema);
 //导出数据模型（里面是构造函数）；
-
-
-
-// const schema = new mongoose.Schema({ name: String, size: String });
-// const Tank = mongoose.model('Tank', schema);
