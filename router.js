@@ -2,12 +2,16 @@ const express = require('express');
 const axios = require('axios');
 const Product = require('./models/product');
 const User = require('./models/user');
+const fs = require('fs').promises;
+const multer = require('multer');
+const path = require('path');
+
 
 const router = express.Router()
 
 const url = 'https://www.1823.gov.hk/common/ical/tc.json';
 
-
+//-----------------------
 router.get('/', (req, res) => {
     res.render('index.html', {
        user: req.session.user
@@ -115,15 +119,55 @@ router.get('/list/new', function(req, res){
 })
 
 
-router.post('/list/new', async(req, res)=>{
-    try{
-        await new Product(req.body).save();
-    }catch(e){
-        console.error('保存產品失敗:', e);
-    }finally{
+// 设置multer
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, path.join(__dirname, 'public/uploads'))
+    },
+    filename: function (req, file, cb) {
+      cb(null, file.fieldname + '-' + Date.now()+ path.extname(file.originalname))
+    }
+  })
+  const upload = multer({
+    storage: storage,
+    limits: { fileSize: 2 * 1024 * 1024 }, // 文件最大为2MB
+    fileFilter: (req, file, cb) => {
+        const filetypes = /jpeg|jpg|png|gif/; // 允许的文件类型
+        const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+        const mimetype = filetypes.test(file.mimetype);
+
+        if (mimetype && extname) {
+            return cb(null, true);
+        }
+        cb('错误：只允许上传图像文件!');
+    }
+});
+
+  router.post('/list/new', upload.single('image'), async (req, res) => {
+
+    try {
+        // 检查 req.file 是否存在
+        if (!req.file) {
+            throw new Error('没有上传文件');
+        }
+
+        const newProduct = new Product({
+            imageUrl: req.file.filename, // 确保 filename 是有效的
+            code: req.body.code,
+            name: req.body.name,
+            price: req.body.price,
+            quantity: req.body.quantity,
+            note: req.body.note,
+        });
+
+        await newProduct.save();
+    } catch (e) {
+        console.error('保存产品失败:', e.message); // 显示具体错误信息
+    } finally {
         res.redirect('/list');
     }
-})
+});
+
 //渲染编辑
 router.get('/list/edit', async(req, res)=>{
     data = await Product.findById(req.query.id.replace(/"/g, ''));
@@ -202,8 +246,27 @@ router.get('/download', (req, res) => {
     });
 });
 //products
-router.get('/products', (req, res)=>{
-    res.render('products.html')
+router.get('/products', async(req, res)=>{
+    data = await Product.find({})
+    console.log(data);
+    res.render('products.html',{
+        products:data
+    })
+})
+
+
+//————————————————————————————————————————
+router.get('/fs', async (req, res)=>{
+    let data;
+    try{
+        data = await fs.readFile('./README.md')
+    }catch(e){
+        console.log(e);
+    }finally{
+        if(data){
+        console.log(data.toString());
+        }
+    }
 })
 
 module.exports = router;

@@ -5,6 +5,10 @@ mongoose.connect('mongodb://localhost:27017/product');
 const { Schema } = mongoose;
 
 const productSchema = new Schema({
+	imageUrl: {
+        type: String,
+		required: true
+    },
 	code: {
 		type: Number,
 		required: true

@@ -65,48 +65,30 @@
 
     <div class="container">
         <h1>我们的商品</h1>
-
-        <div class="product-row">
+    
+        <div class="products-container">
+            {{each products}}
+            {{if $index % 2 === 0}} <!-- 检查是否为偶数索引 -->
+            <div class="product-row">
+            {{/if}}
+            
             <div class="product">
-                <img src="public/img/phone1.jpg" alt="手机1">
+                <img src="uploads/{{$value.imageUrl}}" alt="{{$value.name}}" style="width:100px;height:auto;">
                 <div class="product-info">
-                    <h2 class="product-name">iPhone 14 Pro</h2>
-                    <p class="product-quantity">数量: 10</p>
-                    <p class="product-status">状态: 有货</p>
+                    <h2 class="product-name">{{$value.name}}</h2>
+                    <p class="product-quantity">{{$value.quantity}}</p>
+                    <p class="product-status">{{$value.price}}</p>
                 </div>
             </div>
+            
+            {{if $index % 2 === 1 || $index === products.length - 1}} <!-- 检查是否为奇数索引 or 是最后一个 -->
+            </div> <!-- 结束当前的product-row -->
+            {{/if}}
+            {{/each}}
 
-            <div class="product">
-                <img src="public/img/phone2.jpg" alt="手机2">
-                <div class="product-info">
-                    <h2 class="product-name">Samsung Galaxy S22</h2>
-                    <p class="product-quantity">数量: 5</p>
-                    <p class="product-status">状态: 暂无库存</p>
-                </div>
-            </div>
         </div>
-
-        <div class="product-row">
-            <div class="product">
-                <img src="public/img/phone3.jpg" alt="手机3">
-                <div class="product-info">
-                    <h2 class="product-name">Huawei P50 Pro</h2>
-                    <p class="product-quantity">数量: 8</p>
-                    <p class="product-status">状态: 有货</p>
-                </div>
-            </div>
-
-            <div class="product">
-                <img src="public/img/phone4.jpg" alt="手机4">
-                <div class="product-info">
-                    <h2 class="product-name">Xiaomi 12</h2>
-                    <p class="product-quantity">数量: 15</p>
-                    <p class="product-status">状态: 有货</p>
-                </div>
-            </div>
-        </div>
-
     </div>
+    
 
 </body>
 
