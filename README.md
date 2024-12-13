@@ -1,7 +1,13 @@
 # mobileProject
-|路徑|方法｜get參數｜post參數｜權限｜備注
-|/ |post|
 
+npm init -y
 
+npm install express mongoose express-art-template multer dotenv bootstrap body-parser axios express-session jquery
 
+node add.js
+
+admin account:
+mobile@mobile.com
+password:
+7788
 

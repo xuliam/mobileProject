@@ -237,19 +237,23 @@ router.get('/download', (req, res)=>{
     res.render('download.html')
 })
 
-router.get('/download', (req, res) => {
-    const file = path.join(__dirname, './download/instructorOfMongodb.pdf'); 
+router.get('/download-file', (req, res) => {
+    console.log("接收到下载请求"); // 检查请求是否到达路由
+    const file = path.join(__dirname, './download/instructorOfMongodb.pdf');
+    console.log("文件路径:", file);
     res.download(file, 'instructorOfMongodb.pdf', (err) => {
         if (err) {
             console.error("文件下载失败:", err);
             res.status(500).send("下载文件时出错");
+        } else {
+            console.log("文件下载成功");
         }
     });
 });
+
 //products
 router.get('/products', async(req, res)=>{
     data = await Product.find({})
-    console.log(data);
     res.render('products.html',{
         products:data
     })
