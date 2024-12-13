@@ -21,12 +21,14 @@
         h1 {
             text-align: center;
             color: #333;
+            margin-bottom: 30px; /* 减少间距 */
         }
 
         .product-row {
-            display: flex; /* 使用弹性布局 */
-            justify-content: space-between; /* 在行中分隔产品 */
-            margin-bottom: 20px; /* 行之间的间距 */
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap; /* 允许换行以适应视口 */
+            margin-bottom: 15px; /* 减少间距 */
         }
 
         .product {
@@ -34,29 +36,45 @@
             border-radius: 8px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             padding: 15px;
-            flex: 0 48%; /* 确保产品占据48%的宽度，留出间隔 */
+            flex: 1 1 calc(50% - 10px); /* 每个产品最少占用50%宽度 */
+            margin: 5px;
+            box-sizing: border-box;
+            transition: transform 0.2s; /* 增加过渡效果 */
+        }
+
+        .product:hover {
+            transform: translateY(-5px); /* 悬停效果 */
         }
 
         .product img {
-            max-width: 100%; /* 使图像适应产品容器 */
-            border-radius: 8px;
-            margin-bottom: 10px; /* 图像与文本之间的间距 */
+            width: 100%; /* 适应容器宽度 */
+            height: auto;
+            border-radius: 8px 8px 0 0; /* 圆角效果 */
         }
 
         .product-info {
-            flex: 1;
+            display: flex; /* 使用flex布局 */
+            flex-direction: column; /* 列排列 */
+            align-items: flex-start; /* 从左侧对齐 */
         }
 
-        .product-name {
-            font-size: 28px; /* 增大字号 */
-            color: #4CAF50;
-            margin: 0;
+        .product-details {
+            display: flex; /* 使用flex布局 */
+            justify-content: space-between; /* 两侧对齐 */
+            width: 100%; /* 完全利用宽度 */
+            margin: 5px 0; /* 上下间距 */
         }
 
-        .product-quantity,
-        .product-status {
-            font-size: 18px; /* 增大字号 */
-            margin: 5px 0;
+        .product-label {
+            font-weight: bold; /* 标签加粗 */
+            margin-right: 10px; /* 标签和文本之间的间距 */
+            color: #333; /* 标签颜色 */
+            min-width: 60px; /* 保持标签宽度一致 */
+        }
+
+        .product-name, .product-quantity, .product-status {
+            margin: 0; /* 清除默认的margin */
+            color: #666; /* 文本颜色 */
         }
     </style>
 </head>
@@ -64,7 +82,9 @@
 <body>
 
     <div class="container">
-        <h1>我们的商品</h1>
+        <a href="/">
+            <h1>我们的商品</h1>
+        </a>
     
         <div class="products-container">
             {{each products}}
@@ -73,11 +93,20 @@
             {{/if}}
             
             <div class="product">
-                <img src="uploads/{{$value.imageUrl}}" alt="{{$value.name}}" style="width:100px;height:auto;">
+                <img src="uploads/{{$value.imageUrl}}" alt="{{$value.name}}" style="width:100%; height:auto;"> <!-- 适应容器宽度 -->
                 <div class="product-info">
-                    <h2 class="product-name">{{$value.name}}</h2>
-                    <p class="product-quantity">{{$value.quantity}}</p>
-                    <p class="product-status">{{$value.price}}</p>
+                    <div class="product-details">
+                        <p class="product-label">产品：</p>
+                        <h2 class="product-name">{{$value.name}}</h2>
+                    </div>
+                    <div class="product-details">
+                        <p class="product-label">数量：</p>
+                        <p class="product-quantity">{{$value.quantity}}</p>
+                    </div>
+                    <div class="product-details">
+                        <p class="product-label">价格：</p>
+                        <p class="product-status">{{$value.price}}</p>
+                    </div>
                 </div>
             </div>
             
@@ -85,7 +114,6 @@
             </div> <!-- 结束当前的product-row -->
             {{/if}}
             {{/each}}
-
         </div>
     </div>
     
