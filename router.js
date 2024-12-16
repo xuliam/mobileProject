@@ -5,6 +5,7 @@ const User = require('./models/user');
 const fs = require('fs').promises;
 const multer = require('multer');
 const path = require('path');
+const events = [];
 
 
 const router = express.Router()
@@ -197,39 +198,79 @@ router.get('/list/delete', async(req, res)=>{
 // holiday api______________________________________________________
 async function getHoliday(url) {
     try {
-      const response = await axios.get(url);  
-      const data = response.data;
-      let events = [];
+        const response = await axios.get(url);  
+        const data = response.data;
+        let events = [];
 
         data.vcalendar.forEach(calendarItem => {
             calendarItem.vevent.forEach(veventItem => {
-                events.push({
-                    summary: veventItem.summary,
-                    dtstart: veventItem.dtstart[0]
-                });
-            })
-        })
-        console.log(events);
+                if (veventItem.dtstart[0].startsWith('2024')) {
+                     // 将 dtstart 转换为 Date 对象
+                     const dateStr = veventItem.dtstart[0];
+                     const year = parseInt(dateStr.substring(0, 4), 10);
+                     const month = parseInt(dateStr.substring(4, 6), 10) - 1; // 月份从0开始
+                     const day = parseInt(dateStr.substring(6, 8), 10);
+                     const eventDate = new Date(year, month, day);
+                    events.push({
+                        summary: veventItem.summary,
+                        dtstart: eventDate
+                    });
+                }
+            });
+        });
         return events;
     } catch (error) {
-        console.error(error);
+        console.error("获取假期数据时出错:", error);
         return [];
-      }
+    }
+}
+
+
+// 查找最近的事件函数
+async function findNearestEvent(events) {
+
+    const today = new Date();
+    console.log("今天的日期:", today);
+    let nearestEvent = null;
+    let smallestDifference = Infinity;
+
+    for (const event of events) {
+        console.log("处理事件:", event);
+        const eventDate = new Date(event.dtstart);
+        console.log("事件日期:", eventDate);
+        if (isNaN(eventDate.getTime())) {
+            console.log("无效的日期格式:", event.dtstart);
+            continue;
+        }
+        const difference = Math.abs(eventDate - today);
+        console.log("日期差异:", difference);
+
+        if (difference < smallestDifference) {
+            smallestDifference = difference;
+            nearestEvent = event;
+        }
     }
 
+    return nearestEvent;
+}
 
-router.get('/info', async(req, res)=>{
-    
-    
-        // function getToday(){
-        //     var datetime = new Date();
-        //     // console.log(datetime.toISOString().slice(0,10));
-        //     console.log(datetime);
-        //     return datetime;
-        // }
-        const events = await getHoliday(url)
-    res.render('info.html', {events: events} );
+
+router.get('/info', async(req, res) => {
+    const events = await getHoliday(url);
+    const nearestEvent = await findNearestEvent(events);
+
+    // 将 nearestEvent 包装在一个数组中
+    const nearestEvents = nearestEvent ? [nearestEvent] : [];
+
+    console.log("Events:", events);
+    console.log("Nearest Events:", nearestEvents);
+
+    res.render('info.html', { 
+        events: events,
+        nearestEvents: nearestEvents  // 确保这里使用复数形式
+    });
 });
+
 
 //——————————————————————————————————————-
 // download pdf

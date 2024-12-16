@@ -270,8 +270,21 @@
         <h1 class="h2">Info</h1>
       </div>
 
+      <h2>下一個休息日</h2>
+      {{ if nearestEvents && nearestEvents.length > 0 }}
+        <table>
+          {{ each nearestEvents }}
+            <tr>
+              <td>{{ $value.summary }}</td>
+              <td>{{ $value.dtstart.toLocaleDateString() }}</td>
+            </tr>
+          {{ /each }}
+        </table>
+      {{ else }}
+        <p>暫無最近的休息日</p>
+      {{ /if }}
 
-      <h2>关铺头日子</h2>
+      <h2>2024年关铺日子</h2>
       <div class="table-responsive small">
     
         <div class="table-responsive small">
